@@ -2,7 +2,7 @@ import numpy as np
 import trimesh
 from trimesh.ray.ray_pyembree import RayMeshIntersector
 from shapely.geometry import LineString
-from tqdm import tqdm_notebook as tqdm
+from tqdm import tqdm
 import math
 
 
