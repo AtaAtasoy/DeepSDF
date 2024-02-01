@@ -106,7 +106,7 @@ if __name__ =="__main__":
         scaled_and_translated_mesh = scale_and_translate_to_unit_sphere(mesh)
         scaled_and_translated_mesh.export(os.path.join(shape_save_dir, 'mesh_simplified.obj'), file_type='obj')
 
-        points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=250000)
+        points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=125000)
 
         # Create positive and negative samples according to sdf values with their corresponding points
         # Positive samples are the points that are inside the mesh
@@ -145,7 +145,7 @@ if __name__ =="__main__":
             scaled_and_translated_mesh.export(os.path.join(shape_save_dir, 'mesh_simplified.obj'), file_type='obj')
 
            
-            points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=250000)
+            points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=125000)
 
             # Create positive and negative samples according to sdf values with their corresponding points
             # Positive samples are the points that are inside the mesh
@@ -183,7 +183,7 @@ if __name__ =="__main__":
             
             scaled_and_translated_mesh.export(os.path.join(shape_save_dir, 'mesh_simplified.obj'), file_type='obj')
             
-            points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=250000)
+            points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=125000)
 
             # Create positive and negative samples according to sdf values with their corresponding points
             # Positive samples are the points that are inside the mesh
