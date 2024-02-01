@@ -1,7 +1,5 @@
 import trimesh
 import numpy as np
-import pandas as pd
-import shutil
 import os
 import argparse
 import pybullet as pb
@@ -73,6 +71,7 @@ def random_nonuniform_scale(mesh_original):
 
 
 if __name__ =="__main__":
+    os.environ["PYOPENGL_PLATFORM"] = "egl"
     parser = argparse.ArgumentParser(description="Argument parser")
     parser.add_argument("--mesh_type", help='Specify a mesh type: "watertight" or "simplified"', required=True) 
     parser.add_argument("--category", help="Specify a category from ['bed', 'couch', 'vase', 'pottedplant']", required=True)
