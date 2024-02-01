@@ -90,6 +90,8 @@ if __name__ =="__main__":
     category_save_dir = os.path.join(SAVE_DIR, category)
         
     shapes = [shape for shape in os.listdir(category_data_dir) if os.path.isdir(os.path.join(category_data_dir, shape))]
+    
+    print('No Augment Loop')
     for shape in shapes:
         shape_data_dir = os.path.join(category_data_dir, shape)
         shape_save_dir = os.path.join(category_save_dir, shape)
@@ -116,15 +118,20 @@ if __name__ =="__main__":
         negative_samples = np.concatenate([points[negative_indices], sdf[negative_indices].reshape(-1, 1)], axis=1)
             
         np.savez(os.path.join(shape_save_dir, 'sdf.npz'), pos=positive_samples, neg=negative_samples)
-
+    
 
     # Rotation Augment Loop
+    print('Rotation Augment Loop')
     for shape in shapes:
         for i in range(5): # 5 rotation augments
             shape_data_dir = os.path.join(category_data_dir, shape)
             shape_save_dir = os.path.join(category_save_dir, shape)
             # Give it a new name in the form _rot_i
-            shape_save_dir = os.path.join(shape_save_dir, '_rot_' + str(i))
+            shape_save_dir = os.path.join(shape_save_dir + '_rot_' + str(i))
+            
+            # If the directory does not exist, create it
+            if not os.path.exists(shape_save_dir):
+                os.makedirs(shape_save_dir)
             
             mesh_path = os.path.join(shape_data_dir,f'mesh_{mesh_type}.obj')
             print(f'Mesh at {mesh_path}')
@@ -137,15 +144,7 @@ if __name__ =="__main__":
             
             scaled_and_translated_mesh.export(os.path.join(shape_save_dir, 'mesh_simplified.obj'), file_type='obj')
 
-            '''
-            sampler = MeshSampler(scaled_and_translated_mesh)
-                
-            sampler.compute_visible_faces()
-            sampler.sample_points(n_points=100000)
-                
-            correct_mesh_points, correct_sdf, correct_normals = sampler.compute_sdf(sigma=0.0025)
-            '''
-            
+           
             points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=250000)
 
             # Create positive and negative samples according to sdf values with their corresponding points
@@ -158,35 +157,31 @@ if __name__ =="__main__":
             negative_samples = np.concatenate([points[negative_indices], sdf[negative_indices].reshape(-1, 1)], axis=1)
                 
             np.savez(os.path.join(shape_save_dir, 'sdf.npz'), pos=positive_samples, neg=negative_samples)
-
+    
 
     # Scale Augment Loop
+    print('Scale Augment Loop')
     for shape in shapes:
         for i in range(3): # 3 nonuniform scale augments
             shape_data_dir = os.path.join(category_data_dir, shape)
             shape_save_dir = os.path.join(category_save_dir, shape)
             # Give it a new name in the form _scale_i
-            shape_save_dir = os.path.join(shape_save_dir, '_scale_' + str(i))
+            shape_save_dir = os.path.join(shape_save_dir + '_scale_' + str(i))
+            
+             # If the directory does not exist, create it
+            if not os.path.exists(shape_save_dir):
+                os.makedirs(shape_save_dir)
             
             mesh_path = os.path.join(shape_data_dir,f'mesh_{mesh_type}.obj')
             print(f'Mesh at {mesh_path}')
                 
             mesh = trimesh.load(mesh_path)
-            mesh = shapenet_rotate(mesh)
-            # Random nonuniform scale
             mesh = random_nonuniform_scale(mesh)
             scaled_and_translated_mesh = scale_and_translate_to_unit_sphere(mesh)
+            # Random nonuniform scale
+            mesh = shapenet_rotate(mesh)
             
             scaled_and_translated_mesh.export(os.path.join(shape_save_dir, 'mesh_simplified.obj'), file_type='obj')
-
-            '''
-            sampler = MeshSampler(scaled_and_translated_mesh)
-                
-            sampler.compute_visible_faces()
-            sampler.sample_points(n_points=100000)
-                
-            correct_mesh_points, correct_sdf, correct_normals = sampler.compute_sdf(sigma=0.0025)
-            '''
             
             points, sdf = sample_sdf_near_surface(scaled_and_translated_mesh, number_of_points=250000)
 
